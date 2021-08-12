@@ -1,0 +1,103 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+        "vpc01": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": {
+                    "Ref": "vpc01CidrBlock"
+                }
+            }
+        },
+        "subnet01": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "vpc01"
+                },
+                "CidrBlock": {
+                    "Ref": "subnet01CidrBlock"
+                },
+                "AvailabilityZone": "us-east-1a"
+            }
+        },
+        "subnet02": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "vpc01"
+                },
+                "CidrBlock": {
+                    "Ref": "subnet02CidrBlock"
+                },
+                "AvailabilityZone": "us-east-1b"
+            }
+        },
+        "Igw01": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {}
+        },
+        "Igw01AttachVpc01": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "vpc01"
+                },
+                "InternetGatewayId": {
+                    "Ref": "Igw01"
+                }
+            }
+        },
+        "RtPublic": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "vpc01"
+                }
+            },
+            "DependsOn": [
+                "Igw01"
+            ]
+        },
+        "PublicRoute": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "RtPublic"
+                },
+                "GatewayId": {
+                    "Ref": "Igw01"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0"
+            }
+        },
+        "Sub01RtPublicAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "RtPublic"
+                },
+                "SubnetId": {
+                    "Ref": "subnet01"
+                }
+            }
+        }
+    },
+    "Parameters": {
+        "vpc01CidrBlock": {
+            "Description": "We will use 16 block on private subnet.",
+            "Type": "String",
+            "Default": "172.16.0.0/16"
+        },
+        "subnet01CidrBlock": {
+            "Description": "We will use 24 block on vpc assigned blocked.",
+            "Type": "String",
+            "Default": "172.16.0.0/24"
+        },
+        "subnet02CidrBlock": {
+            "Description": "We will use 24 block on vpc assigned blocked.",
+            "Type": "String",
+            "Default": "172.16.1.0/24"
+        }
+    }
+}
