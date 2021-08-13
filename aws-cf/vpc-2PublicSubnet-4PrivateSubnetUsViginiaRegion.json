@@ -1,0 +1,183 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Resources": {
+        "vpc01": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": {
+                    "Ref": "vpc01CidrBlock"
+                }
+            }
+        },
+        "subnet01": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "vpc01"
+                },
+                "CidrBlock": {
+                    "Ref": "subnet01CidrBlock"
+                },
+                "AvailabilityZone": "us-east-1a"
+            }
+        },
+        "subnet02": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "vpc01"
+                },
+                "CidrBlock": {
+                    "Ref": "subnet02CidrBlock"
+                },
+                "AvailabilityZone": "us-east-1b"
+            }
+        },
+        "subnet03": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "vpc01"
+                },
+                "CidrBlock": {
+                    "Ref": "subnet03CidrBlock"
+                },
+                "AvailabilityZone": "us-east-1c"
+            }
+        },
+        "subnet04": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "vpc01"
+                },
+                "CidrBlock": {
+                    "Ref": "subnet04CidrBlock"
+                },
+                "AvailabilityZone": "us-east-1d"
+            }
+        },
+        "subnet05": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "vpc01"
+                },
+                "CidrBlock": {
+                    "Ref": "subnet05CidrBlock"
+                },
+                "AvailabilityZone": "us-east-1e"
+            }
+        },
+        "subnet06": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "vpc01"
+                },
+                "CidrBlock": {
+                    "Ref": "subnet06CidrBlock"
+                },
+                "AvailabilityZone": "us-east-1e"
+            }
+        },
+        "PublicRt": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": {
+                    "Ref": "vpc01"
+                }
+            }
+        },
+        "PublicRtRoute": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRt"
+                },
+                "GatewayId": {
+                    "Ref": "igw01"
+                },
+                "DestinationCidrBlock": "0.0.0.0/0"
+            },
+            "DependsOn": [
+                "igw01"
+            ]
+        },
+        "igw01": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {}
+        },
+        "igw01Attachment": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "InternetGatewayId": {
+                    "Ref": "igw01"
+                },
+                "VpcId": {
+                    "Ref": "vpc01"
+                }
+            }
+        },
+        "Sub1RtAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "SubnetId": {
+                    "Ref": "subnet01"
+                },
+                "RouteTableId": {
+                    "Ref": "PublicRt"
+                }
+            }
+        },
+        "Sub2RtAssociation": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": {
+                    "Ref": "PublicRt"
+                },
+                "SubnetId": {
+                    "Ref": "subnet02"
+                }
+            }
+        }
+    },
+    "Parameters": {
+        "vpc01CidrBlock": {
+            "Description": "We use 10 private network with 16 ip address block.",
+            "Type": "String",
+            "Default": "10.0.0.0/16"
+        },
+        "subnet01CidrBlock": {
+            "Description": "We use 10 private network with 24 ip address block.",
+            "Type": "String",
+            "Default": "10.0.0.0/24"
+        },
+        "subnet02CidrBlock": {
+            "Description": "We use 10 private network with 24 ip address block.",
+            "Type": "String",
+            "Default": "10.0.1.0/24"
+        },
+        "subnet03CidrBlock": {
+            "Description": "We use 10 private network with 24 ip address block.",
+            "Type": "String",
+            "Default": "10.0.2.0/24"
+        },
+        "subnet04CidrBlock": {
+            "Description": "We use 10 private network with 24 ip address block.",
+            "Type": "String",
+            "Default": "10.0.3.0/24"
+        },
+        "subnet05CidrBlock": {
+            "Description": "We use 10 private network with 24 ip address block.",
+            "Type": "String",
+            "Default": "10.0.4.0/24"
+        },
+        "subnet06CidrBlock": {
+            "Description": "We use 10 private network with 24 ip address block.",
+            "Type": "String",
+            "Default": "10.0.5.0/24"
+        }
+
+    }
+}
