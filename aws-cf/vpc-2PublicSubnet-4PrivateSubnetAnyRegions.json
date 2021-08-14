@@ -138,37 +138,37 @@
     },
     "Parameters": {
         "vpc01CidrBlock": {
-            "Description": "We use 10 private network with 16 ip address block.",
+            "Description": "We can use any private network with 16 ip address block.",
             "Type": "String",
             "Default": "10.0.0.0/16"
         },
         "subnet01CidrBlock": {
-            "Description": "We use 10 private network with 24 ip address block.",
+            "Description": "We can use any cidr with 24 ip address block associated to vpc block.",
             "Type": "String",
             "Default": "10.0.0.0/24"
         },
         "subnet02CidrBlock": {
-            "Description": "We use 10 private network with 24 ip address block.",
+            "Description": "We can use any cidr with 24 ip address block associated to vpc block.",
             "Type": "String",
             "Default": "10.0.1.0/24"
         },
         "subnet03CidrBlock": {
-            "Description": "We use 10 private network with 24 ip address block.",
+            "Description": "We can use any cidr with 24 ip address block associated to vpc block.",
             "Type": "String",
             "Default": "10.0.2.0/24"
         },
         "subnet04CidrBlock": {
-            "Description": "We use 10 private network with 24 ip address block.",
+            "Description": "We can use any cidr with 24 ip address block associated to vpc block.",
             "Type": "String",
             "Default": "10.0.3.0/24"
         },
         "subnet05CidrBlock": {
-            "Description": "We use 10 private network with 24 ip address block.",
+            "Description": "We can use any cidr with 24 ip address block associated to vpc block.",
             "Type": "String",
             "Default": "10.0.4.0/24"
         },
         "subnet06CidrBlock": {
-            "Description": "We use 10 private network with 24 ip address block.",
+            "Description": "We can use any cidr with 24 ip address block associated to vpc block.",
             "Type": "String",
             "Default": "10.0.5.0/24"
         }
