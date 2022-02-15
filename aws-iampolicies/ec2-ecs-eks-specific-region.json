@@ -1,0 +1,62 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:*",
+                "s3-object-lambda:*",
+                "ec2:*",
+                "elasticloadbalancing:*",
+                "cloudwatch:*",
+                "autoscaling:*",
+                "eks:*",
+                "ecs:*",
+                "iam:*",
+                "organizations:DescribeAccount",
+                "organizations:DescribeOrganization",
+                "organizations:DescribeOrganizationalUnit",
+                "organizations:DescribePolicy",
+                "organizations:ListChildren",
+                "organizations:ListParents",
+                "organizations:ListPoliciesForTarget",
+                "organizations:ListRoots",
+                "organizations:ListPolicies",
+                "organizations:ListTargetsForPolicy"
+            ],
+            "Resource": "*",
+            "Condition":{
+                "StringEquals": {
+                    "aws:RequestedRegion": [
+                        "us-east-1",
+                        "ap-northeast-1",
+                        "eu-west-2",
+                        "ap-southeast-1"
+                    ]
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": "iam:CreateServiceLinkedRole",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "iam:AWSServiceName": [
+                        "autoscaling.amazonaws.com",
+                        "ec2scheduled.amazonaws.com",
+                        "elasticloadbalancing.amazonaws.com",
+                        "spot.amazonaws.com",
+                        "spotfleet.amazonaws.com",
+                        "transitgateway.amazonaws.com"
+                    ]
+                },
+                "StringLike": {
+                    "iam:PassedToService": [
+                        "ecs-tasks.amazonaws.com"
+                    ]
+                }
+            }
+        }
+    ]
+}
