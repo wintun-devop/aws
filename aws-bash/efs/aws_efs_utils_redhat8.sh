@@ -2,13 +2,13 @@
 
 #https://www.youtube.com/channel/UCz9ebjc-_3t3p49gGpwyAKA (Please subscribe my channel.Thank You!)
 
-#http://www.mmuak.net
+#https://github.com/wintun-devop(My github repo)
 
 #Necessary Update for system packages
 dnf update -y
 
-#Installing dependencies for amazon-efs-utils for ubuntu20.04Lts
-dnf install -y git-all nfs-utils make rpm-build
+#Installing dependencies for amazon-efs-utils for Redhat8
+dnf install -y git-all nfs-utils make rpm-build net-tools
 
 #Change directory for third-party software installation
 cd /opt/
