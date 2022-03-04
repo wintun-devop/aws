@@ -1,0 +1,93 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-mysql8-pv
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs
+  mountOptions:
+    - hard
+    - nfsvers=4.1
+  nfs:
+    path: /mnt/dataf/mysql8data
+    server: 10.100.0.240
+    readOnly: false
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: nfs-mysql8-pvc
+spec:
+  storageClassName: nfs
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql8
+spec:
+  type: NodePort
+  selector:
+    app: mysql8
+  ports:
+  - port: 3306
+    targetPort: 3306
+    nodePort: 30007
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql8-test-dev
+  labels:
+    app: mysql8
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql8
+  template:
+    metadata: 
+      labels: 
+        app: mysql8
+    spec:
+      volumes:
+        - name: nfs-mysql8-pv
+          PersistentVolumeClaim:
+            claimName: nfs-mysql8-pvc
+      containers:
+        - name: mysql8
+          image: mysql:latest
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom: 
+                secretKeyRef:
+                  name: mysql-root-pass
+                  key:  password
+            - name: MYSQL_DATABASE
+              valueFrom: 
+                secretKeyRef:
+                  name: mysql-db-url
+                  key: database
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-user-pass
+                  key: username
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-user-pass
+                  key: password
+          volumeMounts:
+            - name: nfs-mysql8-pv
+              mountPath: /var/lib/mysql
+          ports:
+            - containerPort: 3306
+              name: mysql8
