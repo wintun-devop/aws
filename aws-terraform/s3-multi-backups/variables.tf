@@ -15,8 +15,3 @@ variable "s3_bucket_names" {
   description = "Assigns desire bucket names."
   default=["bkbizatest01","bkbizatest02","bkbizatest03"]
 } 
-variable "s3_acl" {
-  type        = string
-  description = "We will set private on default."
-  default     = "private"
-}
