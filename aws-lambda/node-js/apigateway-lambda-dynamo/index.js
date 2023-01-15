@@ -10,7 +10,8 @@ const tables={
 }
 
 const healthPath='/health';
-const productPath='/product'
+const productPath='/product';
+const productsPath='/products';
 
 exports.handler = async (event) => {
     console.log("Request Event",event);
@@ -37,6 +38,10 @@ exports.handler = async (event) => {
     else if(event.httpMethod === 'DELETE' && event.path === productPath){
         const response = await deleteProduct(JSON.parse(event.body).id);
         return response;    
+    }
+    else if (event.httpMethod === 'GET' && event.path === productsPath){
+        const response = await getProducts();
+        return response;
     }
     else{
       const response = buildResponse(404,{"message":"Error 404 Resource not found."});
@@ -130,6 +135,34 @@ const getProduct = async (id) =>{
             console.error("Read Query Error!",error)
         }
     );
+};
+
+// get many
+
+const getProducts = async () =>{
+    const params = {
+      TableName: tables.Inventories      
+  }
+  const allProducts = await scanDynamoRecords(params,  []);
+  const body = {
+      products: allProducts
+  }
+  return buildResponse(200,body);
+};
+
+// scan record
+const scanDynamoRecords = async (scanParams,itemArray) =>{
+  try {
+      const dynamoData = await dynamodb.scan(scanParams).promise();
+      itemArray = dynamoData.Items;
+      if (dynamoData.LastEvaluateKey){
+          scanParams.ExclusiveStartKey = dynamoData.LastEvaluateKey;
+          return await scanDynamoRecords(scanParams,itemArray);
+      }
+      return itemArray;
+  } catch(error){
+      console.error('You can do your custom error handling here',error);
+  }
 };
 
 // build response
