@@ -36,7 +36,7 @@ exports.handler = async (event) => {
         return response;    
     }
     else if(event.httpMethod === 'DELETE' && event.path === productPath){
-        const response = await deleteProduct(JSON.parse(event.body).id);
+        const response = await deleteProduct(event.queryStringParameters.id);
         return response;    
     }
     else if (event.httpMethod === 'GET' && event.path === productsPath){
