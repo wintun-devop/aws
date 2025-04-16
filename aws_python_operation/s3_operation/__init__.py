@@ -28,8 +28,22 @@ def list_buckets():
         print(str(e))
         raise e
     
+def list_buckets_with_regions():
+    bucket_list = []
+    try:
+        for bucket in s3_client_resource.buckets.all():
+           region = s3_client_resource.meta.client.get_bucket_location(Bucket=bucket.name)['LocationConstraint']
+           # Default to us-east-1
+           bucket_list.append({"name": bucket.name, "region": region if region else "us-east-1"})
+        buckets=json.dumps({"buckets": bucket_list}, indent=4)
+        print("backup",buckets)
+        return {"result":buckets}
+    except ClientError as e:
+        print(str(e))
+        raise e
+
 def main():
-    list_buckets()
+    list_buckets_with_regions()
     
 if __name__ == "__main__":
     main()
